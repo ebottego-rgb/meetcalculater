@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Gymnastics Score Calculator</title>
+	<style>
+		* { box-sizing: border-box; }
+		body {
+			margin: 0;
+			min-height: 100vh;
+			padding: 20px 14px;
+			display: grid;
+			place-items: center;
+			background: #f3f5fa;
+			color: #20243a;
+			font: 16px/1.5 system-ui, sans-serif;
+		}
+		main {
+			width: min(100%, 440px);
+			padding: 26px;
+			border-radius: 18px;
+			background: #fff;
+			box-shadow: 0 10px 30px #17234a18;
+		}
+		h1 { margin: 0 0 6px; font-size: 1.55rem; line-height: 1.2; }
+		.intro, .hint { color: #626a7e; }
+		.intro { margin: 0 0 20px; }
+		label { display: block; margin: 16px 0 6px; font-weight: 650; }
+		input {
+			width: 100%;
+			min-height: 48px;
+			padding: 10px 12px;
+			border: 1px solid #c9cedb;
+			border-radius: 9px;
+			font: inherit;
+			font-size: 1rem;
+		}
+		input:focus { outline: 3px solid #dce5ff; border-color: #4262c5; }
+		.hint { margin: 4px 0 0; font-size: .85rem; }
+		.buttons { display: flex; gap: 10px; margin-top: 22px; }
+		button {
+			flex: 1;
+			min-height: 48px;
+			padding: 10px;
+			border: 0;
+			border-radius: 9px;
+			font: inherit;
+			font-weight: 700;
+			cursor: pointer;
+		}
+		#calculate { background: #218838; color: white; }
+		#clear { background: #edf0f7; color: #252b3e; }
+		button:focus-visible { outline: 3px solid #9db4ff; outline-offset: 2px; }
+		.result {
+			margin-top: 20px;
+			padding: 14px;
+			border-radius: 10px;
+			background: #f0f4ff;
+			text-align: center;
+		}
+		.result-label { display: block; color: #555e75; font-size: .9rem; }
+		output { display: block; color: #2449b2; font-size: 2rem; font-weight: 800; }
+		@media (max-width: 360px) {
+			main { padding: 20px 17px; }
+			.buttons { flex-direction: column; }
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<h1>Gymnastics Score Calculator</h1>
+		<p class="intro">Enter the score values below to calculate your final score.</p>
+
+		<form id="score-form">
+			<label for="start-value">Starting value</label>
+			<input id="start-value" name="start-value" type="number" inputmode="decimal" step="any" required placeholder="For example, 10.0">
+
+			<label for="execution">Execution score</label>
+			<input id="execution" name="execution" type="number" inputmode="decimal" step="any" required placeholder="For example, 8.5">
+
+			<label for="deductions">Neutral deductions</label>
+			<input id="deductions" name="deductions" type="number" inputmode="decimal" min="0" step="any" value="0" required>
+			<p class="hint">Enter deductions as a positive number.</p>
+
+			<div class="buttons">
+				<button id="calculate" type="submit">Calculate score</button>
+				<button id="clear" type="reset">Clear</button>
+			</div>
+		</form>
+
+		<section class="result" aria-live="polite">
+			<span class="result-label">Final score</span>
+			<output id="score" for="start-value execution deductions">—</output>
+		</section>
+		<p class="hint">Calculation: starting value + execution score − neutral deductions.</p>
+	</main>
+
+	<script>
+		const form = document.getElementById('score-form');
+		const scoreOutput = document.getElementById('score');
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			if (!form.reportValidity()) return;
+
+			const start = Number(document.getElementById('start-value').value);
+			const execution = Number(document.getElementById('execution').value);
+			const deductions = Number(document.getElementById('deductions').value);
+			const total = start + execution - deductions;
+			scoreOutput.textContent = Number(total.toFixed(3)).toString();
+		});
+
+		form.addEventListener('reset', () => {
+			scoreOutput.textContent = '—';
+		});
+	</script>
+</body>
+</html>
